@@ -1,8 +1,8 @@
 {
-	"name": "Tallowmere 2 JSON Language Creator",
+	"name": "Tallowmere 2 Language File Creator",
 	"version": "0.0.0",
 	"manifest_version": 2,
-	"description": "Converts a Google Spreadsheet into a JSON file for use with Tallowmere 2.",
+	"description": "Converts a Google Spreadsheet's HTML into JSON and C# for use with Tallowmere 2.",
 	"icons": {
 		"246": "TallowmereBust.png"
 	},
