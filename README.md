@@ -1,2 +1,10 @@
-# Tallowmere2JsonLanguageCreator
-Takes a Google Spreadsheet's HTML, asks the user to choose a language, and creates JSON for use with Tallowmere 2.
+# Tallowmere 2 JSON Language Creator
+This is a Chrome extension that takes a Tallowmere 2 language spreadsheet's HTML, asks the user to choose a language, and creates JSON for use with <a href="https://www.tallowmere2.com/">Tallowmere 2</a>.
+
+Turns this:
+
+<img src="http://i.imgur.com/vCyL0dl.png" />
+
+into this:
+
+<img src="http://i.imgur.com/8GwBA8N.png" />
