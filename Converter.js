@@ -50,31 +50,53 @@ $(document).ready(function() {
 		json += tab + '// ' + $('select').val() + '\n\n';
 
 		var cSharp = autoGenComment;
-		cSharp += 'using UnityEngine;\n\n';
+		cSharp += 'using UnityEngine;\n';
+		cSharp += 'using System.Collections.Generic;\n';
+		cSharp += '\n';
 		cSharp += 'namespace TallowmereII {\n\n';
 		cSharp += tab + '[System.Serializable]\n';
 		cSharp += tab + 'public class LanguageData {\n\n';
 
+		var dungeonNounGroups = [];
+		var currentDungeonNounGroupName = '';
+
 		$('tr').each(function(index, tr){
-			var firstColumnString = $('td', tr).eq(0).text();
+			var firstColumnString = $('td', tr).eq(0).text().trim();
 			
 			if (firstColumnString.length > 0) {
+
 				// Is this a comment?
 				if (firstColumnString.substring(0, 2) == "//") {
 					json += tab + firstColumnString + '\n';
 
-					var headerString = firstColumnString.substring(3);
+					var headerString = firstColumnString.substring(3).trim();
 					if (headerString != "String IDs") {
 						cSharp += tab + tab + '[Header("' + headerString + '")]\n';
+					}
+
+					// Is this a Dungeon Noun comment?
+					var dungeonNounPrefix = 'Dungeon Nouns: ';
+					if (headerString.length > dungeonNounPrefix.length && headerString.substring(0, dungeonNounPrefix.length) == dungeonNounPrefix.length) {
+						currentDungeonNounGroupName = headerString.substring(dungeonNounPrefix.length);
+						dungeonNounGroups[currentDungeonNounGroupName] = [];
+					}
+					else {
+						currentDungeonNounGroupName = '';
 					}
 				}
 				// This is a key
 				else {
 					var keyString = firstColumnString;
-					var valueString = $('td', tr).eq(columnNumber).text();
+					var valueString = $('td', tr).eq(columnNumber).text().trim();
 					json += tab + '"' + keyString + '": "' + valueString + '",\n';
 
 					cSharp += tab + tab + 'public string ' + keyString + ';\n';
+
+					// Add to Dungeon Noun Group if needed
+					if (currentDungeonNounGroupName.length > 0) {
+						var currentDungeonNounGroup = dungeonNounGroups[currentDungeonNounGroupName];
+						//currentDungeonNounGroup.push() 
+					}
 				}
 			}
 			else {
