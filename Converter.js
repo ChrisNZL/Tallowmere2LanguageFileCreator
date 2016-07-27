@@ -49,13 +49,15 @@ $(document).ready(function() {
 		json += tab + autoGenComment;
 		json += tab + '// ' + $('select').val() + '\n\n';
 
-		var cSharp = autoGenComment;
-		cSharp += 'using UnityEngine;\n';
-		cSharp += 'using System.Collections.Generic;\n';
-		cSharp += '\n';
-		cSharp += 'namespace TallowmereII {\n\n';
-		cSharp += tab + '[System.Serializable]\n';
-		cSharp += tab + 'public class LanguageData {\n\n';
+		var ini = '';
+
+		var languageDataCSharp = autoGenComment;
+		languageDataCSharp += 'using UnityEngine;\n';
+		//languageDataCSharp += 'using System.Collections.Generic;\n';
+		languageDataCSharp += '\n';
+		languageDataCSharp += 'namespace TallowmereII {\n\n';
+		languageDataCSharp += tab + '[System.Serializable]\n';
+		languageDataCSharp += tab + 'public class StringID {\n\n';
 
 		var dungeonNounGroups = [];
 		var currentDungeonNounGroupName = '';
@@ -71,7 +73,9 @@ $(document).ready(function() {
 
 					var headerString = firstColumnString.substring(3).trim();
 					if (headerString != "String IDs") {
-						cSharp += tab + tab + '[Header("' + headerString + '")]\n';
+						//languageDataCSharp += tab + tab + '[Header("' + headerString + '")]\n';
+						languageDataCSharp += tab + tab + '// ' + headerString + '\n';
+						ini += '[' + headerString + ']\n';
 					}
 
 					// Is this a Dungeon Noun comment?
@@ -90,35 +94,41 @@ $(document).ready(function() {
 					var valueString = $('td', tr).eq(columnNumber).text().trim();
 					json += tab + '"' + keyString + '": "' + valueString + '",\n';
 
-					cSharp += tab + tab + 'public string ' + keyString + ';\n';
+					ini += keyString + ' = ' + valueString + '\n';
+
+					//cSharp += tab + tab + 'public string ' + keyString + ';\n'; // <- Old
+					languageDataCSharp += tab + tab + 'public const string ' + keyString + ' = "' + keyString + '";\n';
 
 					// Add to Dungeon Noun Group if needed
 					if (currentDungeonNounGroupName.length > 0) {
 						var currentDungeonNounGroup = dungeonNounGroups[currentDungeonNounGroupName];
-						//currentDungeonNounGroup.push() 
 					}
 				}
 			}
 			else {
 				json += '\n';
-				cSharp += '\n';
+				ini += '\n';
+				languageDataCSharp += '\n';
 			}
 		});
 
 		// Remove trailing comma and newline
 		json = json.substring(0, json.length-2) + '\n';
-
 		json += '}\n';
 
-		cSharp += tab + '}\n\n';
-		cSharp += '}\n';
+		ini += '\n';
+
+		languageDataCSharp += tab + '}\n\n';
+		languageDataCSharp += '}\n';
 
 		$('#Converter').append(
-			'<br /><br /><b>Here is your JSON:</b> <br />' +
-			'<textarea style="width:80%; height:40%"">' + json + '</textarea>' +
+			//'<br /><br /><b>Here is your JSON:</b> <br />' +
+			//'<textarea style="width:80%; height:40%"">' + json + '</textarea>' +
+			'<br /><br /><b>Here is your ' + $('select').val() + '.ini content:</b> <br />' +
+			'<textarea style="width:80%; height:40%"">' + ini + '</textarea>' +
 			'<br /><br />' +
-			'<b>Here is your LanguageData.cs:</b> <br />' +
-			'<textarea style="width:80%; height:40%"">' + cSharp + '</textarea>'
+			'<b>Here is your StringID.cs content:</b> <br />' +
+			'<textarea style="width:80%; height:40%"">' + languageDataCSharp + '</textarea>'
 		);
 	});
 
