@@ -1,3 +1,11 @@
+
+// http://stackoverflow.com/a/17606289/206410
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
+
 $(document).ready(function() {
 
 	// Get languages
@@ -92,9 +100,18 @@ $(document).ready(function() {
 				else {
 					var keyString = firstColumnString;
 					var valueString = $('td', tr).eq(columnNumber).text().trim();
+
+					// Convert newlines in the Tips section to %NEWLINE% as a special case
+					if (keyString.length > 4 && keyString.substring(0, 4) == "Tip_") {
+						valueString = valueString.replaceAll("\r\n", "%NEWLINE%");
+						valueString = valueString.replaceAll("\n", "%NEWLINE%");
+					}
+
 					json += tab + '"' + keyString + '": "' + valueString + '",\n';
 
 					ini += keyString + ' = ' + valueString + '\n';
+
+
 
 					//cSharp += tab + tab + 'public string ' + keyString + ';\n'; // <- Old
 					languageDataCSharp += tab + tab + 'public const string ' + keyString + ' = "' + keyString + '";\n';
